@@ -76,41 +76,82 @@ def calcula_assinatura(texto):
     tot_palavra=0
     sentenca=''
     frase=''
+    lista_palavra=[]
+    tot_frase=0
+    tot_sentenca=0
+    lista_geral=list(texto)
+    total_caracteres=0
+
     while i<len(separa_sentencas(texto)):
         sentenca=separa_sentencas(texto)[i]
+        tot_sentenca+=1
         j=0
         while j<len(separa_frases(sentenca)):
             frase=separa_frases(sentenca)[j]
+            tot_frase+=1
             k=0
             while k<len(separa_palavras(frase)):
                 palavra=(separa_palavras(frase))[k]
+                lista_palavra.append(palavra)       
                 tot_tamanho=tot_tamanho+len(palavra)
-                tot_palavra=tot_palavra+1
+                tot_palavra+=1
                 k=k+1
             j=j+1    
         i=i+1
+    for l in lista_geral:
+        if l!='!' and l!='.' and l!='?':
+            total_caracteres+=1
 
     wal=tot_tamanho/tot_palavra
-    print(wal)
-    ttr=0
-    hlr=0
-    sal=0
-    sac=0
-    pal=0
-    pass
+    
+    tot_diferente=n_palavras_diferentes(lista_palavra)
+    ttr=tot_diferente/tot_palavra
+    
+    tot_unicas=n_palavras_unicas(lista_palavra)
+    hlr=tot_unicas/tot_palavra
+    
+    sal=total_caracteres/tot_sentenca
+    
+    sac=tot_frase/tot_sentenca
+    
+    pal=total_caracteres/tot_frase
+    
+    return [wal,ttr,hlr,sal,sac,pal]
 
 def compara_assinatura(as_a, as_b):
     '''IMPLEMENTAR. Essa funcao recebe duas assinaturas de texto e deve devolver o grau de similaridade nas assinaturas.'''
-    pass
+    tamanho_medio_palavra=abs(as_a[0]-as_b[0])
+    type_token=abs(as_a[1]-as_b[1])
+    hapax=abs(as_a[2]-as_b[2])
+    tamanho_medio_senteca=abs(as_a[3]-as_b[3])
+    complexidade_sentenca=abs(as_a[4]-as_b[4])
+    tamanho_medio_frase=abs(as_a[5]-as_b[5])
+    grau_similaridade=(tamanho_medio_frase+tamanho_medio_palavra+tamanho_medio_senteca+hapax+type_token+complexidade_sentenca)/6
+    print(grau_similaridade)
+    return grau_similaridade
 
 
 def avalia_textos(textos, ass_cp):
     '''IMPLEMENTAR. Essa funcao recebe uma lista de textos e uma assinatura ass_cp e deve devolver o numero (1 a n) do texto com maior probabilidade de ter sido infectado por COH-PIAH.'''
-    pass
+    infectado=0
+    i=0
+    mais_similar=1000
+    while i<len(textos):
+        assinatura=calcula_assinatura(textos[i])
+        nivel_similaridade=compara_assinatura(assinatura,ass_cp)
+        if nivel_similaridade<mais_similar:
+            print('entrou na condicional')
+            mais_similar=nivel_similaridade
+            infectado=i+1
+        i=i+1
+    return infectado
 
-'''def main():
-    le_assinatura
-    le_textos'''
 
-texto="Então resolveu ir brincar com a Máquina pra ser também imperador dos filhos da mandioca. Mas as três cunhas deram muitas risadas e falaram que isso de deuses era gorda mentira antiga, que não tinha deus não e que com a máquina ninguém não brinca porque ela mata. A máquina não era deus não, nem possuía os distintivos femininos de que o herói gostava tanto. Era feita pelos homens. Se mexia com eletricidade com fogo com água com vento com fumo, os homens aproveitando as forças da natureza. Porém jacaré acreditou? nem o herói! Se levantou na cama e com um gesto, esse sim! bem guaçu de desdém, tó! batendo o antebraço esquerdo dentro do outro dobrado, mexeu com energia a munheca direita pras três cunhas e partiu. Nesse instante, falam, ele inventou o gesto famanado de ofensa: a pacova."
-calcula_assinatura(texto)
+
+assinatura=le_assinatura()
+textos=le_textos()
+resultado=avalia_textos(textos,assinatura)
+print('O autor do texto',resultado,'está infectado com COH-PIAH')
+
+
+
