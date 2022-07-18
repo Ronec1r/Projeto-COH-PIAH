@@ -147,11 +147,11 @@ def avalia_textos(textos, ass_cp):
     return infectado
 
 
+def main():
+    assinatura=le_assinatura()
+    textos=le_textos()
+    resultado=avalia_textos(textos,assinatura)
+    print('O autor do texto',resultado,'está infectado com COH-PIAH')
 
-assinatura=le_assinatura()
-textos=le_textos()
-resultado=avalia_textos(textos,assinatura)
-print('O autor do texto',resultado,'está infectado com COH-PIAH')
-
-
+main()
 
